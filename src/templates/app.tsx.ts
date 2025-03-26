@@ -27,7 +27,7 @@ export function App() {
             return
         }
         const result = await bee.uploadFile(batchId, file)
-        setSwarmHash(result.reference)
+        setSwarmHash(result.reference.toHex())
         setFile(null)
     }
 
@@ -36,7 +36,7 @@ export function App() {
             return
         }
         const result = await bee.uploadFiles(batchId, fileList)
-        setSwarmHash(result.reference)
+        setSwarmHash(result.reference.toHex())
         setFileList(null)
     }
 
@@ -49,7 +49,7 @@ export function App() {
     return (
         <div>
             {!batchId && <button onClick={getOrCreatePostageBatch}>Get or create postage batch</button>}
-            {batchId && <p>Batch ID: {batchId}</p>}
+            {batchId && <p>Batch ID: {batchId.toHex()}</p>}
             {batchId && !swarmHash && (
                 <div>
                     <p>Single file upload</p>

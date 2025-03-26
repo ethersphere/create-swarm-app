@@ -13,9 +13,9 @@ async function main() {
     console.log('Batch ID', batchId)
     const data = 'Hello, world! The current time is ' + new Date().toLocaleString()
     const uploadResult = await bee.uploadData(batchId, data)
-    console.log('Swarm hash', uploadResult.reference)
+    console.log('Swarm hash', uploadResult.reference.toHex())
     const downloadResult = await bee.downloadData(uploadResult.reference)
-    console.log('Downloaded data:', downloadResult.text())
+    console.log('Downloaded data:', downloadResult.toUtf8())
 }
 
 async function getOrCreatePostageBatch(${codeType === 'typescript' ? 'bee: Bee' : 'bee'}) {

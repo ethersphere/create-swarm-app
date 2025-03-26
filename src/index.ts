@@ -50,7 +50,7 @@ async function main(projectName: string, type: string, host?: string | null, aut
         scripts: {},
         license: 'ISC',
         dependencies: {
-            '@ethersphere/bee-js': '^8.3.1'
+            '@ethersphere/bee-js': '^9.0.3'
         },
         devDependencies: {}
     }
