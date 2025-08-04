@@ -40,8 +40,11 @@ jobs:
               run: node ../dist ${{ matrix.template }} ${{ matrix.template }}
               working-directory: ./generated
 
-            - name: Install and build template
-              run: |
-                  npm install
-                  npm run build
+            - name: Install template dependencies
+              run: npm install
+              working-directory: ./generated/${{ matrix.template }}
+
+            - name: Build template
+              if: matrix.template == 'vite-tsx' || matrix.template == 'node-ts'
+              run: npm run build
               working-directory: ./generated/${{ matrix.template }}
