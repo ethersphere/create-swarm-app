@@ -1,0 +1,47 @@
+name: Build Test
+
+on:
+    push:
+        branches:
+            - 'master'
+    pull_request:
+        branches:
+            - '**'
+
+jobs:
+    build-test:
+        runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                template: [node, node-esm, node-ts, vite-tsx]
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 1
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20.x
+
+            - name: Install Dependencies
+              run: npm ci
+
+            - name: Build Project
+              run: npm run build
+
+            - name: Create folder for generated projects
+              run: mkdir -p generated
+
+            - name: Generate template
+              run: node ../dist ${{ matrix.template }} ${{ matrix.template }}
+              working-directory: ./generated
+
+            - name: Install and build template
+              run: |
+                  npm install
+                  npm run build
+              working-directory: ./generated/${{ matrix.template }}
