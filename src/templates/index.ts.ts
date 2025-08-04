@@ -10,7 +10,7 @@ main()
 async function main() {
     const bee = ${beeInit}
     const batchId = await getOrCreatePostageBatch(bee)
-    console.log('Batch ID', batchId)
+    console.log('Batch ID', batchId.toString())
     const data = 'Hello, world! The current time is ' + new Date().toLocaleString()
     const uploadResult = await bee.uploadData(batchId, data)
     console.log('Swarm hash', uploadResult.reference.toHex())
@@ -19,7 +19,7 @@ async function main() {
 }
 
 async function getOrCreatePostageBatch(${codeType === 'typescript' ? 'bee: Bee' : 'bee'}) {
-    const batches = await bee.getAllPostageBatch()
+    const batches = await bee.getPostageBatches()
     const usable = batches.find(x => x.usable)
   
     if (usable) {

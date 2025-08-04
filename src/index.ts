@@ -3,6 +3,17 @@
 import { Arrays, Strings } from 'cafe-utility'
 import { existsSync, mkdirSync, writeFileSync } from 'fs'
 import { exit } from 'process'
+import {
+    BEE_JS_VERSION,
+    REACT_DOM_VERSION,
+    REACT_VERSION,
+    TSX_VERSION,
+    TYPES_NODE_VERSION,
+    TYPES_REACT_DOM_VERSION,
+    TYPES_REACT_VERSION,
+    TYPESCRIPT_VERSION,
+    VITE_VERSION
+} from './dependency.js'
 import { getAppTsxTemplate } from './templates/app.tsx'
 import { getIndexHtmlTemplate } from './templates/index.html.js'
 import { getIndexTsTemplate } from './templates/index.ts.js'
@@ -49,40 +60,39 @@ async function main(projectName: string, type: string, host?: string | null, aut
         version: '1.0.0',
         scripts: {},
         license: 'ISC',
-        dependencies: {
-            '@ethersphere/bee-js': '^9.0.3'
-        },
+        dependencies: { '@ethersphere/bee-js': BEE_JS_VERSION },
         devDependencies: {}
     }
     if (codeType === 'typescript') {
-        packageJson.devDependencies.typescript = '^5.5.3'
+        packageJson.devDependencies.typescript = TYPESCRIPT_VERSION
     }
     if (projectType === 'vite') {
-        packageJson.dependencies.react = '^18.3.1'
-        packageJson.dependencies['react-dom'] = '^18.3.1'
-        packageJson.devDependencies['@types/react'] = '^18.3.3'
-        packageJson.devDependencies['@types/react-dom'] = '^18.3.0'
+        packageJson.dependencies.react = REACT_VERSION
+        packageJson.dependencies['react-dom'] = REACT_DOM_VERSION
+        packageJson.devDependencies['@types/react'] = TYPES_REACT_VERSION
+        packageJson.devDependencies['@types/react-dom'] = TYPES_REACT_DOM_VERSION
     }
     if (codeType === 'esmodules') {
         packageJson.type = 'module'
     }
     if (projectType === 'vite') {
-        packageJson.devDependencies['vite'] = '^5.3.4'
+        packageJson.devDependencies['vite'] = VITE_VERSION
         packageJson.scripts.start = 'vite'
-        packageJson.scripts.build = 'vite build'
+        packageJson.scripts.build = 'vite build --base=./'
         packageJson.scripts.check = 'tsc --noEmit'
     }
     if (projectType === 'node' && codeType === 'typescript') {
-        packageJson.devDependencies['ts-node'] = '^10.9.2'
-        packageJson.scripts.start = 'ts-node src/index.ts'
+        packageJson.devDependencies['tsx'] = TSX_VERSION
+        packageJson.devDependencies['@types/node'] = TYPES_NODE_VERSION
+        packageJson.scripts.start = 'tsx src'
         packageJson.scripts.build = 'tsc'
         packageJson.scripts.check = 'tsc --noEmit'
     }
     if (projectType === 'node' && codeType === 'commonjs') {
-        packageJson.scripts.start = 'node src/index.js'
+        packageJson.scripts.start = 'node src'
     }
     if (projectType === 'node' && codeType === 'esmodules') {
-        packageJson.scripts.start = 'node --experimental-specifier-resolution=node src/index.js'
+        packageJson.scripts.start = 'node --experimental-specifier-resolution=node src'
     }
 
     const beeHost = host ?? 'http://localhost:1633'

@@ -12,7 +12,7 @@ export function App() {
     const bee = ${beeInit}
 
     async function getOrCreatePostageBatch() {
-        const batches = await bee.getAllPostageBatch()
+        const batches = await bee.getPostageBatches()
         const usable = batches.find(x => x.usable)
 
         if (usable) {
