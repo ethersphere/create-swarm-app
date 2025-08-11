@@ -1,4 +1,4 @@
-export const BEE_JS_VERSION = '^9.8.0'
+export const BEE_JS_VERSION = '^9.8.1'
 export const REACT_VERSION = '^19.1.1'
 export const REACT_DOM_VERSION = '^19.1.1'
 export const TYPESCRIPT_VERSION = '^5.9.2'
