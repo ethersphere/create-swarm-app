@@ -1,5 +1,5 @@
 export function getAppTsxTemplate(beeInit: string) {
-    return `import { BatchId, Bee } from '@ethersphere/bee-js'
+    return `import { BatchId, Bee, Size, Duration } from '@ethersphere/bee-js'
 import { useState } from 'react'
 import { BEE_HOST } from './config'
 
@@ -18,7 +18,7 @@ export function App() {
         if (usable) {
             setBatchId(usable.batchID)
         } else {
-            setBatchId(await bee.createPostageBatch('500000000', 20))
+            setBatchId(await bee.buyStorage(Size.fromGigabytes(1), Duration.fromDays(1)))
         }
     }
 
