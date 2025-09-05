@@ -2,7 +2,7 @@ import { makeImport } from '../importer'
 import { CodeType } from '../types'
 
 export function getIndexTsTemplate(beeInit: string, codeType: CodeType) {
-    return `${makeImport(codeType, ['Bee'], '@ethersphere/bee-js')}
+    return `${makeImport(codeType, ['Bee', 'Size', 'Duration'], '@ethersphere/bee-js')}
 ${makeImport(codeType, ['BEE_HOST'], './config')}
 
 main()
@@ -25,7 +25,7 @@ async function getOrCreatePostageBatch(${codeType === 'typescript' ? 'bee: Bee' 
     if (usable) {
         return usable.batchID
     } else {
-        return bee.createPostageBatch('500000000', 20)
+        return bee.buyStorage(Size.fromGigabytes(1), Duration.fromDays(1))
     }
 }
 `
