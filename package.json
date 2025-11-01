@@ -14,10 +14,10 @@
     "license": "ISC",
     "type": "commonjs",
     "devDependencies": {
-        "@types/node": "^22.13.13",
-        "typescript": "^5.8.2"
+        "@types/node": "^24.9.2",
+        "typescript": "^5.9.3"
     },
     "dependencies": {
-        "cafe-utility": "^27.14.2"
+        "cafe-utility": "^33.3.1"
     }
 }
