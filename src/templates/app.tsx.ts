@@ -1,5 +1,7 @@
+import { BEE_JS_PACKAGE } from '../dependency'
+
 export function getAppTsxTemplate(beeInit: string) {
-    return `import { BatchId, Bee, Size, Duration } from '@ethersphere/bee-js'
+    return `import { BatchId, Bee, Size, Duration } from '${BEE_JS_PACKAGE}'
 import { useState } from 'react'
 import { BEE_HOST } from './config'
 

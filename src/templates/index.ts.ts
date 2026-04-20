@@ -1,8 +1,9 @@
+import { BEE_JS_PACKAGE } from '../dependency'
 import { makeImport } from '../importer'
 import { CodeType } from '../types'
 
 export function getIndexTsTemplate(beeInit: string, codeType: CodeType) {
-    return `${makeImport(codeType, ['Bee', 'Size', 'Duration'], '@ethersphere/bee-js')}
+    return `${makeImport(codeType, ['Bee', 'Size', 'Duration'], BEE_JS_PACKAGE)}
 ${makeImport(codeType, ['BEE_HOST'], './config')}
 
 main()
