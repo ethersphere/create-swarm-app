@@ -1,4 +1,5 @@
-export const BEE_JS_VERSION = '^11.1.1'
+export const BEE_JS_PACKAGE = '@upcoming/bee-js'
+export const BEE_JS_VERSION = '^12.0.0'
 export const REACT_VERSION = '^19.2.4'
 export const REACT_DOM_VERSION = '^19.2.4'
 export const TYPESCRIPT_VERSION = '^5.9.3'

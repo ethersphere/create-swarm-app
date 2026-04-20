@@ -4,6 +4,7 @@ import { Arrays, Strings } from 'cafe-utility'
 import { existsSync, mkdirSync, writeFileSync } from 'fs'
 import { exit } from 'process'
 import {
+    BEE_JS_PACKAGE,
     BEE_JS_VERSION,
     REACT_DOM_VERSION,
     REACT_VERSION,
@@ -60,7 +61,7 @@ async function main(projectName: string, type: string, host?: string | null, aut
         version: '1.0.0',
         scripts: {},
         license: 'ISC',
-        dependencies: { '@ethersphere/bee-js': BEE_JS_VERSION },
+        dependencies: { [BEE_JS_PACKAGE]: BEE_JS_VERSION },
         devDependencies: {}
     }
     if (codeType === 'typescript') {
