@@ -1,0 +1,33 @@
+name: Update bee-js
+
+on:
+    repository_dispatch:
+        types: [bee-js-released]
+
+jobs:
+    update-bee-js:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            pull-requests: write
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Update BEE_JS_VERSION in dependency.ts
+              run: |
+                  VERSION=${{ github.event.client_payload.version }}
+                  sed -i "s/BEE_JS_VERSION = '\\^[^']*'/BEE_JS_VERSION = '^\$VERSION'/" src/dependency.ts
+
+            - name: Create pull request
+              uses: peter-evans/create-pull-request@v7
+              with:
+                  commit-message: 'chore: update bee-js to v${{ github.event.client_payload.version }}'
+                  branch: update-bee-js-${{ github.event.client_payload.version }}
+                  title: 'chore: update bee-js to v${{ github.event.client_payload.version }}'
+                  body: |
+                      Automated update of `@ethersphere/bee-js` to `^${{ github.event.client_payload.version }}`.
+
+                      Please review the [bee-js changelog](https://github.com/ethersphere/bee-js/blob/master/CHANGELOG.md) before merging.
+                  labels: dependencies
