@@ -4,6 +4,9 @@ on:
   repository_dispatch:
     types: [bee-js-released]
 
+env:
+  VERSION: ${{ github.event.client_payload.version }}
+
 jobs:
   update-bee-js:
     runs-on: ubuntu-latest
@@ -16,18 +19,15 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Validate version
-        env:
-          VERSION: ${{ github.event.client_payload.version }}
         run: |
           if ! printf '%s' "$VERSION" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9.-]+)?$'; then
             echo "invalid version: $VERSION" >&2; exit 1
           fi
 
       - name: Update BEE_JS_VERSION in dependency.ts
-        env:
-          VERSION: ${{ github.event.client_payload.version }}
         run: |
-          sed -i "s/BEE_JS_VERSION = '\\^[^']*'/BEE_JS_VERSION = '^\$VERSION'/" src/dependency.ts
+          sed -i "s/BEE_JS_VERSION = '\\^[^']*'/BEE_JS_VERSION = '^${VERSION}'/" src/dependency.ts
+          grep -q "BEE_JS_VERSION = '\\^$VERSION'" src/dependency.ts || { echo 'sed did not match'; exit 1; }
 
       - name: Generate App token
         id: app-token
@@ -40,11 +40,11 @@ jobs:
         uses: peter-evans/create-pull-request@v8.1.1
         with:
           token: ${{ steps.app-token.outputs.token }}
-          commit-message: 'chore: update bee-js to v${{ github.event.client_payload.version }}'
-          branch: update-bee-js-${{ github.event.client_payload.version }}
-          title: 'chore: update bee-js to v${{ github.event.client_payload.version }}'
+          commit-message: 'chore: update bee-js to v${{ env.VERSION }}'
+          branch: update-bee-js-${{ env.VERSION }}
+          title: 'chore: update bee-js to v${{ env.VERSION }}'
           body: |
-            Automated update of `@ethersphere/bee-js` to `^${{ github.event.client_payload.version }}`.
+            Automated update of `@ethersphere/bee-js` to `^${{ env.VERSION }}`.
 
-            Please review the [bee-js changelog](https://github.com/ethersphere/bee-js/blob/master/CHANGELOG.md) before merging.
+            Please review the [bee-js release notes](${{ github.event.client_payload.release_url }}) before merging.
           labels: dependencies
