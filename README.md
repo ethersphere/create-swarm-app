@@ -103,3 +103,8 @@ Generated projects use [bee-js](https://github.com/ethersphere/bee-js), the offi
 -   [Swarm documentation](https://docs.ethswarm.org)
 -   [bee-js documentation](https://bee-js.ethswarm.org)
 -   [Bee node quick start](https://docs.ethswarm.org/docs/bee/installation/quick-start)
+
+## Maintainers
+
+- [Cafe137](https://github.com/Cafe137)
+- [slapec93](https://github.com/slapec93)
