@@ -1,0 +1,50 @@
+name: Update bee-js
+
+on:
+  repository_dispatch:
+    types: [bee-js-released]
+
+env:
+  VERSION: ${{ github.event.client_payload.version }}
+
+jobs:
+  update-bee-js:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate version
+        run: |
+          if ! printf '%s' "$VERSION" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9.-]+)?$'; then
+            echo "invalid version: $VERSION" >&2; exit 1
+          fi
+
+      - name: Update BEE_JS_VERSION in dependency.ts
+        run: |
+          sed -i "s/BEE_JS_VERSION = '\\^[^']*'/BEE_JS_VERSION = '^${VERSION}'/" src/dependency.ts
+          grep -q "BEE_JS_VERSION = '\\^$VERSION'" src/dependency.ts || { echo 'sed did not match'; exit 1; }
+
+      - name: Generate App token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.BEE_RUNNER_APP_ID }}
+          private-key: ${{ secrets.BEE_RUNNER_KEY }}
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v8.1.1
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          commit-message: 'chore: update bee-js to v${{ env.VERSION }}'
+          branch: update-bee-js-${{ env.VERSION }}
+          title: 'chore: update bee-js to v${{ env.VERSION }}'
+          body: |
+            Automated update of `@ethersphere/bee-js` to `^${{ env.VERSION }}`.
+
+            Please review the [bee-js release notes](${{ github.event.client_payload.release_url }}) before merging.
+          labels: dependencies
