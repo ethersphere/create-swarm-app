@@ -2,7 +2,7 @@ import { makeImport } from '../importer'
 import { CodeType } from '../types'
 
 export function getIndexTsTemplate(beeInit: string, codeType: CodeType) {
-    return `${makeImport(codeType, ['Bee', 'Size', 'Duration'], '@ethersphere/bee-js')}
+  return `${makeImport(codeType, ['Bee', 'Size', 'Duration'], '@ethersphere/bee-js')}
 ${makeImport(codeType, ['BEE_HOST'], './config')}
 
 main()
@@ -12,20 +12,20 @@ async function main() {
     const batchId = await getOrCreatePostageBatch(bee)
     console.log('Batch ID', batchId.toString())
     const data = 'Hello, world! The current time is ' + new Date().toLocaleString()
-    const uploadResult = await bee.uploadData(batchId, data)
+    const uploadResult = await bee.data.upload(batchId, data)
     console.log('Swarm hash', uploadResult.reference.toHex())
-    const downloadResult = await bee.downloadData(uploadResult.reference)
+    const downloadResult = await bee.data.download(uploadResult.reference)
     console.log('Downloaded data:', downloadResult.toUtf8())
 }
 
 async function getOrCreatePostageBatch(${codeType === 'typescript' ? 'bee: Bee' : 'bee'}) {
-    const batches = await bee.getPostageBatches()
-    const usable = batches.find(x => x.usable)
+    const stamps = await bee.stamp.getAll()
+    const usable = stamps.find(x => x.usable)
   
     if (usable) {
         return usable.batchID
     } else {
-        return bee.buyStorage(Size.fromGigabytes(1), Duration.fromDays(1))
+        return bee.storage.buy(Size.fromGigabytes(1), Duration.fromDays(1))
     }
 }
 `

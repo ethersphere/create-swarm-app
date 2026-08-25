@@ -1,5 +1,5 @@
 export function getAppTsxTemplate(beeInit: string) {
-    return `import { BatchId, Bee, Size, Duration } from '@ethersphere/bee-js'
+  return `import { BatchId, Bee, Size, Duration } from '@ethersphere/bee-js'
 import { useState } from 'react'
 import { BEE_HOST } from './config'
 
@@ -12,13 +12,13 @@ export function App() {
     const bee = ${beeInit}
 
     async function getOrCreatePostageBatch() {
-        const batches = await bee.getPostageBatches()
-        const usable = batches.find(x => x.usable)
+        const stamps = await bee.stamp.getAll()
+        const usable = stamps.find(x => x.usable)
 
         if (usable) {
             setBatchId(usable.batchID)
         } else {
-            setBatchId(await bee.buyStorage(Size.fromGigabytes(1), Duration.fromDays(1)))
+            setBatchId(await bee.storage.buy(Size.fromGigabytes(1), Duration.fromDays(1)))
         }
     }
 
@@ -26,7 +26,7 @@ export function App() {
         if (!batchId) {
             return
         }
-        const result = await bee.uploadFile(batchId, file)
+        const result = await bee.file.upload(batchId, file)
         setSwarmHash(result.reference.toHex())
         setFile(null)
     }
@@ -35,7 +35,7 @@ export function App() {
         if (!batchId || !fileList) {
             return
         }
-        const result = await bee.uploadFiles(batchId, fileList)
+        const result = await bee.collection.uploadFromFileList(batchId, fileList)
         setSwarmHash(result.reference.toHex())
         setFileList(null)
     }
